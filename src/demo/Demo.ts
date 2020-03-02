@@ -1,5 +1,4 @@
-import QuadTree from '../QuadTree';
-import Point from '../Point';
+import QuadTree from '../lib/QuadTree';
 
 let canvasElem: HTMLCanvasElement;
 

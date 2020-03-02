@@ -10,7 +10,7 @@ enum NodePosition {
 
 export default class QuadTree {
   readonly bounds: Rectangle;
-  readonly nodes: QuadTree[]; // [tl, tr, bl, br]
+  readonly nodes: QuadTree[]; // [TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT]
   readonly childrens: Point[];
   readonly maxChildren: number;
   readonly maxDepth: number;
