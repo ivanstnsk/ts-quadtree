@@ -2,6 +2,18 @@ import QuadTree from '../lib/QuadTree';
 
 let canvasElem: HTMLCanvasElement;
 
+function renderCounter(counter: number, depth: number): void {
+  const divElem = document.createElement('div');
+  divElem.style.position = 'absolute';
+  divElem.style.left = '0px';
+  divElem.style.top = '0px';
+  divElem.style.padding = '4px';
+  divElem.style.backgroundColor = 'black';
+  divElem.style.color = 'white';
+  divElem.innerText = `Objects: ${counter}\nDepth: ${depth}`;
+  document.body.appendChild(divElem);
+}
+
 function renderTree(tree: QuadTree, ctx: CanvasRenderingContext2D | null) {
   if (!ctx) return;
 
@@ -49,7 +61,7 @@ export function demo(): void {
   const tree = new QuadTree(bounds, 0, 10, 10);
 
   // demo insert
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 30000; i++) {
     tree.insert({
       x: Math.random() * (window.innerWidth - 20) + 10,
       y: Math.random() * (window.innerHeight - 20) + 10,
@@ -57,4 +69,6 @@ export function demo(): void {
   }
 
   renderTree(tree, ctx);
+
+  renderCounter(30000, 0);
 }
