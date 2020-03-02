@@ -1,4 +1,5 @@
 import QuadTree from '../QuadTree';
+import Point from '../Point';
 
 let canvasElem: HTMLCanvasElement;
 
@@ -12,6 +13,11 @@ function renderTree(tree: QuadTree, ctx: CanvasRenderingContext2D | null) {
   ctx.lineTo(tree.bounds.x, tree.bounds.y + tree.bounds.height);
   ctx.lineTo(tree.bounds.x, tree.bounds.y);
   ctx.stroke();
+
+  tree.childrens.forEach((child) => {
+    ctx.fillStyle = "green";
+    ctx.fillRect(child.x - 2, child.y - 2, 4, 4);
+  });
   
   if (tree.nodes.length > 0) {
     tree.nodes.forEach((node) => renderTree(node, ctx));
@@ -41,13 +47,15 @@ export function demo(): void {
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
   };
-  const tree = new QuadTree(bounds);
+  const tree = new QuadTree(bounds, 0, 10, 2);
 
-  //demo split
-  tree.split();
-  tree.nodes[0].split();
-  tree.nodes[0].nodes[1].split();
-  tree.nodes[0].nodes[1].nodes[2].split();
+  // demo insert
+  for (let i = 0; i < 1200; i++) {
+    tree.insert({
+      x: Math.random() * (window.innerWidth - 20) + 10,
+      y: Math.random() * (window.innerHeight - 20) + 10,
+    });
+  }
 
   renderTree(tree, ctx);
 }
