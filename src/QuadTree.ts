@@ -56,19 +56,27 @@ export default class QuadTree {
       if (!splitted) {
         this.childrens.push(children);
       } else {
-        if (children.x < this.bounds.x + this.bounds.width / 2) {
-          if (children.y < this.bounds.y + this.bounds.height / 2) {
-            this.nodes[NodePosition.TOP_LEFT].insert(children);
-          } else {
-            this.nodes[NodePosition.BOTTOM_LEFT].insert(children);
-          }
-        } else {
-          if (children.y < this.bounds.y + this.bounds.height / 2) {
-            this.nodes[NodePosition.TOP_RIGHT].insert(children);
-          } else {
-            this.nodes[NodePosition.BOTTOM_RIGHT].insert(children);
-          }
-        }
+        const nodePos = this.findNodePosition(children.x, children.y);
+        this.nodes[nodePos].insert(children);
+      }
+    }
+  }
+
+  findNodePosition(x: number, y: number): NodePosition {
+    const semiWidth = this.bounds.width / 2;
+    const semiHeight = this.bounds.height / 2;
+
+    if (x < this.bounds.x + semiWidth) {
+      if (y < this.bounds.y + semiHeight) {
+        return NodePosition.TOP_LEFT;
+      } else {
+        return NodePosition.BOTTOM_LEFT;
+      }
+    } else {
+      if (y < this.bounds.y + semiHeight) {
+        return NodePosition.TOP_RIGHT;
+      } else {
+        return NodePosition.BOTTOM_RIGHT;
       }
     }
   }

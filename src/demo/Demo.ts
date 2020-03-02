@@ -47,10 +47,10 @@ export function demo(): void {
     width: window.innerWidth - 20,
     height: window.innerHeight - 20,
   };
-  const tree = new QuadTree(bounds, 0, 10, 2);
+  const tree = new QuadTree(bounds, 0, 10, 10);
 
   // demo insert
-  for (let i = 0; i < 1200; i++) {
+  for (let i = 0; i < 10000; i++) {
     tree.insert({
       x: Math.random() * (window.innerWidth - 20) + 10,
       y: Math.random() * (window.innerHeight - 20) + 10,
