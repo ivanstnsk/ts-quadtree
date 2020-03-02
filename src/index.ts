@@ -1,1 +1,3 @@
-document.write(`You're all set!`);
+import { demo } from './demo';
+
+demo();
