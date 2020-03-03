@@ -62,6 +62,14 @@ export default class QuadTree {
     }
   }
 
+  retrive(x: number, y: number): QuadTree {
+    if (this.nodes.length > 0) {
+      const nodePos = this.findNodePosition(x, y);
+      return this.nodes[nodePos].retrive(x, y);
+    }
+    return this;
+  }
+
   findNodePosition(x: number, y: number): NodePosition {
     const semiWidth = this.bounds.width / 2;
     const semiHeight = this.bounds.height / 2;

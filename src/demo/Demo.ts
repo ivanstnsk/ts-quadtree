@@ -1,6 +1,8 @@
 import QuadTree from '../lib/QuadTree';
 
 let canvasElem: HTMLCanvasElement;
+let canvasTargetElem: HTMLCanvasElement;
+let targetNodes: QuadTree;
 
 function renderCounter(counter: number, depth: number): void {
   const divElem = document.createElement('div');
@@ -35,6 +37,20 @@ function renderTree(tree: QuadTree, ctx: CanvasRenderingContext2D | null) {
   }
 }
 
+function renderTargetTree(tree: QuadTree, ctx: CanvasRenderingContext2D | null) {
+  if (!ctx || !tree) return;
+
+  ctx.clearRect(0, 0, canvasTargetElem.width, canvasTargetElem.height);
+  ctx.beginPath();
+  ctx.strokeStyle = 'red';
+  ctx.moveTo(tree.bounds.x, tree.bounds.y);
+  ctx.lineTo(tree.bounds.x + tree.bounds.width, tree.bounds.y);
+  ctx.lineTo(tree.bounds.x + tree.bounds.width, tree.bounds.y + tree.bounds.height);
+  ctx.lineTo(tree.bounds.x, tree.bounds.y + tree.bounds.height);
+  ctx.lineTo(tree.bounds.x, tree.bounds.y);
+  ctx.stroke();
+}
+
 export function demo(): void {
   document.body.style.padding = '0px';
   document.body.style.margin = '0px';
@@ -50,7 +66,19 @@ export function demo(): void {
   canvasElem.style.backgroundColor = 'rgba(0,0,0,0.8)';
   document.body.appendChild(canvasElem);
 
+  canvasTargetElem = document.createElement('canvas');
+  canvasTargetElem.width = window.innerWidth;
+  canvasTargetElem.height = window.innerHeight;
+  canvasTargetElem.style.position = 'absolute';
+  canvasTargetElem.style.left = '0px';
+  canvasTargetElem.style.top = '0px';
+  canvasTargetElem.style.width = `${window.innerWidth}px`;
+  canvasTargetElem.style.height = `${window.innerHeight}px`;
+  canvasTargetElem.style.backgroundColor = 'transparent';
+  document.body.appendChild(canvasTargetElem);
+
   const ctx = canvasElem.getContext('2d');
+  const ctxTarget = canvasTargetElem.getContext('2d');
   
   const bounds = {
     x: 10, 
@@ -61,14 +89,19 @@ export function demo(): void {
   const tree = new QuadTree(bounds, 0, 10, 10);
 
   // demo insert
-  for (let i = 0; i < 30000; i++) {
+  for (let i = 0; i < 1000; i++) {
     tree.insert({
       x: Math.random() * (window.innerWidth - 20) + 10,
       y: Math.random() * (window.innerHeight - 20) + 10,
     });
   }
 
-  renderTree(tree, ctx);
+  canvasTargetElem.onmousemove = (event) => {
+    const { pageX, pageY } = event;
+    targetNodes = tree.retrive(pageX, pageY);
+    renderTargetTree(targetNodes, ctxTarget);
+  }
 
+  renderTree(tree, ctx);
   renderCounter(30000, 0);
 }
